@@ -16,6 +16,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var button2: UIButton!
     @IBOutlet weak var button3: UIButton!
     
+    @IBOutlet weak var scoreLabel: UILabel!
+    
     var countries = [String]()
     var correctAnswer = 0
     var score = 0
@@ -37,7 +39,7 @@ class ViewController: UIViewController {
         
     }
     
-    func askQuestion() {
+    func askQuestion(action: UIAlertAction! = nil) {
         countries = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: countries) as! [String]
         button1.setImage(UIImage(named: countries[0]), for: .normal)
         button2.setImage(UIImage(named: countries[1]), for: .normal)
@@ -46,6 +48,26 @@ class ViewController: UIViewController {
         
         title = countries[correctAnswer].uppercased()
     }
+    
+    @IBAction func buttonTapped(_ sender: UIButton) {
+        var title: String
+        
+        if sender.tag == correctAnswer {
+            title = "Correct"
+            score += 1
+            
+        } else {
+            title = "wrong"
+            score -= 1
+        }
+    
+        let ac = UIAlertController(title: title, message: nil, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
+        present(ac,animated: true)
+        
+        scoreLabel.text = ("Your score is \(score).")
+    }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
